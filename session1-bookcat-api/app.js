@@ -59,14 +59,3 @@ app.get("/authors", async (req, res) => {
         if (connection) await connection.close();
     }
 });
-const sql = require('mssql');
-
-constdgConfig = {
-    server: 'localhost',
-    database: 'NPBookstore',
-    user: 'gladriel_heh',
-    password: 'Ri3l',
-    options: {
-        trustServerCertificate: true}
-};
-
