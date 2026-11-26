@@ -1,3 +1,12 @@
+require('dotenv').config();
+
+const dbConfig = {
+    server: process.env.DB_SERVER,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    options: {trustServerCertificate: true },
+}
 const express = require('express');
 const sql = require('mssql'); // new line
 const app = express();
@@ -36,3 +45,28 @@ app.get('/categories', (req, res) => {
         { id: 3, name: 'Biography' }
     ]);
 });
+app.get("/authors", async (req, res) => {
+    let connection;
+    try {
+        connection = await sql.connect(dgConfig);
+        const sqlQuery = "SELECT AuthorID, Name FROM Author";
+        const request = connection.request();
+        const result = await request.query(sqlQuery);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).json({ error: "Database error"});
+    } finally {
+        if (connection) await connection.close();
+    }
+});
+const sql = require('mssql');
+
+constdgConfig = {
+    server: 'localhost',
+    database: 'NPBookstore',
+    user: 'gladriel_heh',
+    password: 'Ri3l',
+    options: {
+        trustServerCertificate: true}
+};
+
