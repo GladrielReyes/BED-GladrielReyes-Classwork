@@ -18,14 +18,7 @@ app.get('/about', (req,res) => {
 });
 app.get('/db-test', async (req, res) => {
 try {
-const pool = await sql.connect({
-server: 'localhost',
-port: 1433,
-database: 'NPBookstore',
-user: 'gladriel_heh',
-password: 'ri3l',
-options: { trustServerCertificate: true },
-});
+const pool = await sql.connect(dbConfig);
 const result = await pool.request()
 .query('SELECT COUNT(*) AS Total FROM Author');
 await pool.close();
@@ -48,7 +41,7 @@ app.get('/categories', (req, res) => {
 app.get("/authors", async (req, res) => {
     let connection;
     try {
-        connection = await sql.connect(dgConfig);
+        connection = await sql.connect(dbConfig);
         const sqlQuery = "SELECT AuthorID, Name FROM Author";
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -56,6 +49,19 @@ app.get("/authors", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: "Database error"});
     } finally {
+        if (connection) await connection.close();
+    }
+});
+app.get("/publishers", async(req, res) => {
+    let connection;
+    try {
+        connection = await sql.connect(dbConfig);
+        const request = connection.request();
+        const result = await request.query(c)
+    } catch (err) {
+        console.error(err);
+        res.status(200).json({error: 'Database error'});
+    } finally{
         if (connection) await connection.close();
     }
 });
